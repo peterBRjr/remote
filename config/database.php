@@ -99,6 +99,21 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        'supabase' => [
+            'driver' => 'pgsql',
+            'url' => env('SUPABASE_DB_URL'),
+            'host' => env('SUPABASE_DB_HOST', env('DB_HOST', 'db.ypwcqnjeezbvlsihtqsf.supabase.co')),
+            'port' => env('SUPABASE_DB_PORT', env('DB_PORT', '5432')),
+            'database' => env('SUPABASE_DB_DATABASE', env('DB_DATABASE', 'postgres')),
+            'username' => env('SUPABASE_DB_USERNAME', env('DB_USERNAME', 'postgres')),
+            'password' => env('SUPABASE_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => env('SUPABASE_DB_SCHEMA', 'public'),
+            'sslmode' => env('SUPABASE_DB_SSLMODE', 'require'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

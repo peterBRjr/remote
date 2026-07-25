@@ -19,6 +19,12 @@ class Review extends Model
         'comfort_rating',
     ];
 
+    protected $casts = [
+        'rating' => 'integer',
+        'wifi_rating' => 'integer',
+        'comfort_rating' => 'integer',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use App\Services\SupabaseService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,7 +17,7 @@ class FavoriteController extends Controller
         return view('favorites.index', compact('favorites'));
     }
 
-    public function toggle(Location $location): RedirectResponse
+    public function toggle(Location $location, SupabaseService $supabaseService): RedirectResponse
     {
         $user = auth()->user();
 
@@ -25,6 +26,12 @@ class FavoriteController extends Controller
             $message = 'Local removido dos seus favoritos.';
         } else {
             $user->favorites()->attach($location->id);
+            if ($supabaseService->isConfigured()) {
+                $supabaseService->insertTable('favorites', [
+                    'user_id' => $user->id,
+                    'location_id' => $location->id,
+                ]);
+            }
             $message = 'Local adicionado aos seus favoritos com sucesso!';
         }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\LocationController;
@@ -11,13 +12,20 @@ Route::get('/', [LocationController::class, 'index'])->name('home');
 Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
 Route::get('/locations/{location}', [LocationController::class, 'show'])->name('locations.show');
 
+// Rotas de Autenticação Nativa (E-mail / Senha)
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.perform');
+});
+
 // Rotas de Autenticação Socialite via Google
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('login.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
-Route::post('/logout', [GoogleAuthController::class, 'logout'])->name('logout');
 
-// Rotas de Demonstração / Dev Login (para testes rápidos)
-Route::get('/login', [GoogleAuthController::class, 'redirect'])->name('login');
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Rotas Protegidas por Middleware Auth
 Route::middleware(['auth'])->group(function () {

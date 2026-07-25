@@ -36,6 +36,10 @@ class Location extends Model
         'weather_temp' => 'float',
     ];
 
+    protected $appends = [
+        'average_rating',
+    ];
+
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);

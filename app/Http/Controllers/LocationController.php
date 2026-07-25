@@ -6,14 +6,25 @@ use App\Http\Requests\StoreLocationRequest;
 use App\Jobs\FetchLocationMetadataJob;
 use App\Models\Location;
 use App\Services\GeocodingService;
+use App\Services\SupabaseService;
+use App\Services\WeatherService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LocationController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, SupabaseService $supabaseService): View
     {
+        // Sempre sincronizar e carregar as localizações cadastradas no Supabase
+        if ($supabaseService->isConfigured()) {
+            try {
+                $supabaseService->syncAllFromSupabase();
+            } catch (\Throwable $e) {
+                // Log de falha de conexão silencioso
+            }
+        }
+
         $query = Location::with(['reviews', 'favoritedBy']);
 
         // Filtro por Categoria
@@ -58,15 +69,21 @@ class LocationController extends Controller
         return view('locations.create');
     }
 
-    public function store(StoreLocationRequest $request, GeocodingService $geocodingService): RedirectResponse
-    {
+    public function store(
+        StoreLocationRequest $request, 
+        GeocodingService $geocodingService,
+        WeatherService $weatherService,
+        SupabaseService $supabaseService
+    ): RedirectResponse {
         $validated = $request->validated();
 
         // 1. Converter Endereço em Coordenadas Lat/Lng (Geocoding com Cache)
         $coords = $geocodingService->geocodeAddress($validated['address']);
 
-        // 2. Salvar o Local no Banco
-        $location = Location::create([
+        // 2. Consultar clima em tempo real baseado nas coordenadas
+        $weather = $weatherService->getWeatherForCoordinates($coords['latitude'], $coords['longitude']);
+
+        $locationPayload = [
             'name' => $validated['name'],
             'address' => $validated['address'],
             'latitude' => $coords['latitude'],
@@ -77,13 +94,54 @@ class LocationController extends Controller
             'outlet_density' => $validated['outlet_density'],
             'description' => $validated['description'] ?? null,
             'image_url' => $validated['image_url'] ?? null,
+            'weather_summary' => $weather['summary'] ?? null,
+            'weather_icon' => $weather['icon'] ?? '01d',
+            'weather_temp' => $weather['temp'] ?? 24.0,
             'created_by_user_id' => auth()->id(),
-        ]);
+        ];
 
-        // 3. Disparar Job em Fila (Background Queue) para enriquecer o local com Foursquare + OpenWeather
+        // 3. Salvar o Local no Banco Local / Supabase
+        $location = Location::create($locationPayload);
+
+        // 4. Sincronizar em tempo real com o Supabase via REST API (resolvendo o ID do usuário no Supabase)
+        if ($supabaseService->isConfigured()) {
+            $supabasePayload = $locationPayload;
+
+            if (auth()->check()) {
+                $authUser = auth()->user();
+                $supabaseUsers = $supabaseService->fetchTable('users', ['email' => "eq.{$authUser->email}"]);
+
+                if (!empty($supabaseUsers)) {
+                    $supabasePayload['created_by_user_id'] = $supabaseUsers[0]['id'];
+                } else {
+                    // Se o usuário ainda não existir no Supabase, criar primeiro
+                    $supabaseService->insertTable('users', [
+                        'name' => $authUser->name,
+                        'email' => $authUser->email,
+                        'google_id' => $authUser->google_id,
+                        'avatar' => $authUser->avatar,
+                        'password' => $authUser->password,
+                        'created_at' => now()->toIso8601String(),
+                    ]);
+
+                    $supabaseUsersRetry = $supabaseService->fetchTable('users', ['email' => "eq.{$authUser->email}"]);
+                    if (!empty($supabaseUsersRetry)) {
+                        $supabasePayload['created_by_user_id'] = $supabaseUsersRetry[0]['id'];
+                    } else {
+                        unset($supabasePayload['created_by_user_id']);
+                    }
+                }
+            } else {
+                unset($supabasePayload['created_by_user_id']);
+            }
+
+            $supabaseService->insertTable('locations', $supabasePayload);
+        }
+
+        // 5. Disparar Job em Fila em Background para buscar imagens adicionais do local
         FetchLocationMetadataJob::dispatch($location);
 
         return redirect()->route('locations.show', $location)
-            ->with('success', 'Local cadastrado com sucesso! As fotos e clima do local estão sendo processadas em background.');
+            ->with('success', 'Spot cadastrado com sucesso! Dados sincronizados com o Supabase.');
     }
 }

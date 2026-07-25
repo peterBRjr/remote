@@ -13,9 +13,16 @@
             @endif
         </span>
 
-        @if($location->weather_summary)
-            <div class="weather-badge">
-                <span>🌤️ {{ $location->weather_summary }}</span>
+        @if($location->weather_summary || $location->weather_temp)
+            <div class="weather-badge" title="Clima ao vivo nas coordenadas ({{ round($location->latitude, 3) }}, {{ round($location->longitude, 3) }})">
+                @if($location->weather_icon && str_contains($location->weather_icon, 'http'))
+                    <img src="{{ $location->weather_icon }}" style="width: 20px; height: 20px;" alt="Clima">
+                @elseif($location->weather_icon)
+                    <img src="https://openweathermap.org/img/wn/{{ $location->weather_icon }}.png" style="width: 24px; height: 24px; margin: -5px -2px;" alt="Clima">
+                @else
+                    <span>🌤️</span>
+                @endif
+                <span>{{ $location->weather_summary ?? ($location->weather_temp ? round($location->weather_temp, 1) . '°C' : '24°C') }}</span>
             </div>
         @endif
     </div>

@@ -66,10 +66,15 @@
                         </div>
                     </div>
 
-                    <div style="text-align: center;">
-                        <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Clima Atual</span>
-                        <div style="font-size: 1.1rem; font-weight: 700; color: #fbbf24; margin-top: 0.25rem;">
-                            🌤️ {{ $location->weather_summary ?? '24°C' }}
+                    <div style="text-align: center; background: rgba(251, 191, 36, 0.08); padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(251, 191, 36, 0.25);">
+                        <span style="font-size: 0.75rem; color: #fbbf24; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em;">Clima no Local</span>
+                        <div style="font-size: 1.15rem; font-weight: 800; color: #fff; margin-top: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                            @if($location->weather_icon)
+                                <img src="https://openweathermap.org/img/wn/{{ $location->weather_icon }}.png" style="width: 28px; height: 28px; margin: -5px 0;" alt="Clima">
+                            @else
+                                🌤️
+                            @endif
+                            <span>{{ $location->weather_summary ?? ($location->weather_temp ? round($location->weather_temp, 1) . '°C' : '24.0°C') }}</span>
                         </div>
                     </div>
                 </div>
@@ -88,14 +93,30 @@
         </div>
     </div>
 
-    <!-- Seção de Geolocalização (Google Maps Container) -->
-    <div class="glass-card" style="padding: 2rem; margin-bottom: 3rem;">
-        <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin-bottom: 1rem;">📍 Localização no Mapa</h3>
+    <!-- Seção de Geolocalização (Interactive Premium Dark Map) -->
+    <div class="glass-card" style="padding: 2rem; margin-bottom: 3rem; position: relative;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📍 Localização no Mapa</span>
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">
+                    Coordenadas geocodificadas com alta precisão ({{ number_format($location->latitude, 6) }}, {{ number_format($location->longitude, 6) }})
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;">
+                <a href="https://www.google.com/maps/search/?api=1&query={{ $location->latitude }},{{ $location->longitude }}" 
+                   target="_blank" rel="noopener noreferrer" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                    🗺️ Abrir no Google Maps ↗
+                </a>
+            </div>
+        </div>
         
         <!-- Renderização do Container do Mapa -->
-        <div id="map" style="width: 100%; height: 380px; border-radius: var(--radius-md); border: 1px solid var(--border-glass); z-index: 1;"></div>
+        <div id="map" style="width: 100%; height: 420px; border-radius: var(--radius-md); border: 1px solid var(--border-glass); z-index: 1; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);"></div>
 
-        <!-- Script de Inicialização do Mapa (Google Maps / Leaflet) -->
+        <!-- Script de Inicialização do Mapa -->
         @if(config('services.google.maps_api_key') && config('services.google.maps_api_key') !== 'mock_google_maps_key')
             <script>
                 function initGoogleMap() {
@@ -104,8 +125,15 @@
                     const spotLocation = { lat: lat, lng: lng };
 
                     const map = new google.maps.Map(document.getElementById("map"), {
-                        zoom: 15,
+                        zoom: 16,
                         center: spotLocation,
+                        styles: [
+                            { elementType: "geometry", stylers: [{ color: "#1d2c4d" }] },
+                            { elementType: "labels.text.fill", stylers: [{ color: "#8ec3b9" }] },
+                            { elementType: "labels.text.stroke", stylers: [{ color: "#1a3646" }] },
+                            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#4b687a" }] },
+                            { featureType: "water", elementType: "geometry", stylers: [{ color: "#0e1726" }] }
+                        ]
                     });
 
                     new google.maps.Marker({
@@ -117,35 +145,76 @@
             </script>
             <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&callback=initGoogleMap" async defer></script>
         @else
-            <!-- Leaflet CSS & JS para Mapa Interativo Real em Ambiente Local/Dev -->
+            <!-- Leaflet CSS & JS com Map Tiles Dark Theme Glassmorphic (CartoDB Dark Matter) -->
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
             <script>
-                setTimeout(function() {
+                document.addEventListener("DOMContentLoaded", function() {
                     const lat = {{ $location->latitude }};
                     const lng = {{ $location->longitude }};
                     
                     const map = L.map('map', {
                         center: [lat, lng],
-                        zoom: 15,
+                        zoom: 16,
                         zoomControl: true
                     });
 
-                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                    // Dark Mode Tiles (CartoDB Dark Matter) para combinar perfeitamente com a interface Glassmorphic
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                        subdomains: 'abcd',
                         maxZoom: 19
                     }).addTo(map);
 
-                    const customMarker = L.marker([lat, lng]).addTo(map);
+                    // Ícone customizado de alta tecnologia com efeito Neon Pulse
+                    const neonIcon = L.divIcon({
+                        className: 'custom-neon-marker',
+                        html: `<div style="
+                            width: 24px; 
+                            height: 24px; 
+                            background: #6366f1; 
+                            border: 3px solid #38bdf8; 
+                            border-radius: 50%; 
+                            box-shadow: 0 0 20px #6366f1, 0 0 40px #38bdf8;
+                            animation: pulse 2s infinite;
+                        "></div>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12]
+                    });
+
+                    const customMarker = L.marker([lat, lng], { icon: neonIcon }).addTo(map);
+                    
                     customMarker.bindPopup(`
-                        <div style="font-family: sans-serif; padding: 0.25rem;">
-                            <strong style="font-size: 1rem; color: #1e293b;">{{ addslashes($location->name) }}</strong><br>
-                            <span style="font-size: 0.85rem; color: #64748b;">📍 {{ addslashes($location->address) }}</span><br>
-                            <span style="font-size: 0.85rem; color: #059669; font-weight: bold;">⚡ {{ $location->wifi_speed_mbps }} Mbps</span>
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 0.5rem; min-width: 220px; color: #0f172a;">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 0.25rem;">
+                                {{ strtoupper($location->category) }}
+                            </div>
+                            <strong style="font-size: 1.1rem; color: #0f172a; display: block; margin-bottom: 0.35rem;">
+                                {{ addslashes($location->name) }}
+                            </strong>
+                            <div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem;">
+                                📍 {{ addslashes($location->address) }}
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.8rem; background: #059669; color: #fff; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold;">
+                                    ⚡ {{ $location->wifi_speed_mbps }} Mbps
+                                </span>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" 
+                                   style="font-size: 0.8rem; color: #2563eb; font-weight: bold; text-decoration: none; margin-left: auto;">
+                                    Abrir no Maps ↗
+                                </a>
+                            </div>
                         </div>
                     `).openPopup();
-                }, 100);
+                });
             </script>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+                    70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+                    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+                }
+            </style>
         @endif
     </div>
 
@@ -234,8 +303,8 @@
                 @else
                     <div style="text-align: center; padding: 2rem 0;">
                         <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Você precisa estar autenticado para enviar uma avaliação.</p>
-                        <a href="{{ route('login.google') }}" class="btn-primary" style="background: linear-gradient(135deg, #4285F4, #34A853);">
-                            Entrar com Google para Avaliar
+                        <a href="{{ route('login.google') }}" class="btn-primary btn-google-login" style="background: linear-gradient(135deg, #4285F4, #34A853);">
+                            <span class="btn-text">Entrar com Google para Avaliar</span>
                         </a>
                     </div>
                 @endauth

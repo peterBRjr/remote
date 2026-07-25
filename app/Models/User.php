@@ -19,6 +19,7 @@ class User extends Authenticatable
         'google_id',
         'avatar',
         'password',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -30,7 +31,6 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
     }
 
@@ -42,5 +42,10 @@ class User extends Authenticatable
     public function favorites(): BelongsToMany
     {
         return $this->belongsToMany(Location::class, 'favorites')->withTimestamps();
+    }
+
+    public function createdLocations(): HasMany
+    {
+        return $this->hasMany(Location::class, 'created_by_user_id');
     }
 }
