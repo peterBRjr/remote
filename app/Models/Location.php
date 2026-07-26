@@ -23,7 +23,6 @@ class Location extends Model
         'outlet_density',
         'description',
         'image_url',
-        'weather_summary',
         'weather_icon',
         'weather_temp',
         'created_by_user_id',

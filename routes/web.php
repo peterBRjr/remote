@@ -5,12 +5,14 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
 // Home / Feed Principal de Locais
 Route::get('/', [LocationController::class, 'index'])->name('home');
 Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
 Route::get('/locations/{location}', [LocationController::class, 'show'])->name('locations.show');
+Route::get('/api/weather', [WeatherController::class, 'show'])->name('api.weather');
 
 // Rotas de Autenticação Nativa (E-mail / Senha)
 Route::middleware(['guest'])->group(function () {

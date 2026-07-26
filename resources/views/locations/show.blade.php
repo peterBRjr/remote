@@ -66,15 +66,17 @@
                         </div>
                     </div>
 
-                    <div style="text-align: center; background: rgba(251, 191, 36, 0.08); padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(251, 191, 36, 0.25);">
+                    <div style="text-align: center; background: rgba(251, 191, 36, 0.08); padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(251, 191, 36, 0.25);"
+                         class="weather-live-box"
+                         data-lat="{{ $location->latitude }}"
+                         data-lng="{{ $location->longitude }}">
                         <span style="font-size: 0.75rem; color: #fbbf24; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em;">Clima no Local</span>
-                        <div style="font-size: 1.15rem; font-weight: 800; color: #fff; margin-top: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
-                            @if($location->weather_icon)
-                                <img src="https://openweathermap.org/img/wn/{{ $location->weather_icon }}.png" style="width: 28px; height: 28px; margin: -5px 0;" alt="Clima">
-                            @else
-                                🌤️
-                            @endif
-                            <span>{{ $location->weather_summary ?? ($location->weather_temp ? round($location->weather_temp, 1) . '°C' : '24.0°C') }}</span>
+                        <div class="weather-display" style="margin-top: 0.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                                <img class="weather-icon-img" src="https://openweathermap.org/img/wn/01d.png" style="width: 26px; height: 26px; margin: -4px 0;" alt="Clima">
+                                <span class="weather-desc-text" style="font-size: 1.05rem; font-weight: 800; color: #fff;">Carregando...</span>
+                            </div>
+                            <span class="weather-temp-text" style="font-size: 1.15rem; font-weight: 800; color: #fff;">--°C</span>
                         </div>
                     </div>
                 </div>
@@ -311,4 +313,36 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const weatherBox = document.querySelector('.weather-live-box');
+            if (weatherBox) {
+                const lat = weatherBox.getAttribute('data-lat');
+                const lng = weatherBox.getAttribute('data-lng');
+                fetch(`/api/weather?lat=${lat}&lng=${lng}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const iconImg = weatherBox.querySelector('.weather-icon-img');
+                        const descText = weatherBox.querySelector('.weather-desc-text');
+                        const tempText = weatherBox.querySelector('.weather-temp-text');
+                        
+                        if (data.icon && data.icon.startsWith('http')) {
+                            iconImg.src = data.icon;
+                        } else if (data.icon) {
+                            iconImg.src = `https://openweathermap.org/img/wn/${data.icon}.png`;
+                        }
+                        
+                        if (descText) descText.textContent = data.description || 'Tempo Limpo';
+                        if (tempText) tempText.textContent = (data.temp !== undefined ? Number(data.temp).toFixed(1) : '24.0') + '°C';
+                    })
+                    .catch(() => {
+                        const descText = weatherBox.querySelector('.weather-desc-text');
+                        const tempText = weatherBox.querySelector('.weather-temp-text');
+                        if (descText) descText.textContent = 'Ensolarado';
+                        if (tempText) tempText.textContent = '24.0°C';
+                    });
+            }
+        });
+    </script>
 </x-layout>

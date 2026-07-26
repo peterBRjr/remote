@@ -20,7 +20,6 @@ return new class extends Migration
             $table->enum('outlet_density', ['scarce', 'moderate', 'abundant'])->default('abundant');
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
-            $table->string('weather_summary')->nullable();
             $table->string('weather_icon')->nullable();
             $table->decimal('weather_temp', 4, 1)->nullable();
             $table->foreignId('created_by_user_id')->nullable()->constrained('users')->onDelete('set null');

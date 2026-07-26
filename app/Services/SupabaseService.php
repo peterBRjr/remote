@@ -191,9 +191,6 @@ class SupabaseService
                     'outlet_density' => $item['outlet_density'] ?? 'abundant',
                     'description' => $item['description'] ?? 'Ambiente preparado para trabalho remoto.',
                     'image_url' => $item['image_url'] ?? $item['photo_url'] ?? null,
-                    'weather_summary' => $item['weather_summary'] ?? 'Ensolarado 24°C',
-                    'weather_icon' => $item['weather_icon'] ?? '01d',
-                    'weather_temp' => (float) ($item['weather_temp'] ?? 24.5),
                     'created_by_user_id' => (!empty($item['created_by_user_id']) && User::where('id', $item['created_by_user_id'])->exists()) ? $item['created_by_user_id'] : null,
                 ]
             );

@@ -36,7 +36,7 @@ class WeatherService
 
             // 3. Fallback Padrão Simulado se nenhuma API responder
             return [
-                'summary' => 'Ensolarado 24°C',
+                'description' => 'Tempo Limpo',
                 'icon' => '01d',
                 'temp' => 24.0,
             ];
@@ -64,7 +64,7 @@ class WeatherService
                 $icon = $data['weather'][0]['icon'] ?? '01d';
 
                 return [
-                    'summary' => "{$desc} {$temp}°C",
+                    'description' => $desc,
                     'icon' => $icon,
                     'temp' => $temp,
                 ];
@@ -97,7 +97,7 @@ class WeatherService
                 $weatherInfo = $this->mapWmoCodeToWeather($code);
 
                 return [
-                    'summary' => "{$weatherInfo['summary']} {$temp}°C",
+                    'description' => $weatherInfo['summary'],
                     'icon' => $weatherInfo['icon'],
                     'temp' => $temp,
                 ];

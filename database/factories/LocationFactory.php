@@ -57,7 +57,6 @@ class LocationFactory extends Factory
             'outlet_density' => fake()->randomElement($outlets),
             'description' => fake()->paragraph(2),
             'image_url' => fake()->randomElement($sampleImages),
-            'weather_summary' => 'Ensolarado 24°C',
             'weather_icon' => '01d',
             'weather_temp' => fake()->randomFloat(1, 20, 29),
         ];

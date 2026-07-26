@@ -72,16 +72,12 @@ class LocationController extends Controller
     public function store(
         StoreLocationRequest $request, 
         GeocodingService $geocodingService,
-        WeatherService $weatherService,
         SupabaseService $supabaseService
     ): RedirectResponse {
         $validated = $request->validated();
 
         // 1. Converter Endereço em Coordenadas Lat/Lng (Geocoding com Cache)
         $coords = $geocodingService->geocodeAddress($validated['address']);
-
-        // 2. Consultar clima em tempo real baseado nas coordenadas
-        $weather = $weatherService->getWeatherForCoordinates($coords['latitude'], $coords['longitude']);
 
         $locationPayload = [
             'name' => $validated['name'],
@@ -94,9 +90,6 @@ class LocationController extends Controller
             'outlet_density' => $validated['outlet_density'],
             'description' => $validated['description'] ?? null,
             'image_url' => $validated['image_url'] ?? null,
-            'weather_summary' => $weather['summary'] ?? null,
-            'weather_icon' => $weather['icon'] ?? '01d',
-            'weather_temp' => $weather['temp'] ?? 24.0,
             'created_by_user_id' => auth()->id(),
         ];
 

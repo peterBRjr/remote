@@ -13,18 +13,13 @@
             @endif
         </span>
 
-        @if($location->weather_summary || $location->weather_temp)
-            <div class="weather-badge" title="Clima ao vivo nas coordenadas ({{ round($location->latitude, 3) }}, {{ round($location->longitude, 3) }})">
-                @if($location->weather_icon && str_contains($location->weather_icon, 'http'))
-                    <img src="{{ $location->weather_icon }}" style="width: 20px; height: 20px;" alt="Clima">
-                @elseif($location->weather_icon)
-                    <img src="https://openweathermap.org/img/wn/{{ $location->weather_icon }}.png" style="width: 24px; height: 24px; margin: -5px -2px;" alt="Clima">
-                @else
-                    <span>🌤️</span>
-                @endif
-                <span>{{ $location->weather_summary ?? ($location->weather_temp ? round($location->weather_temp, 1) . '°C' : '24°C') }}</span>
-            </div>
-        @endif
+        <div class="weather-badge weather-live-card" 
+             data-lat="{{ $location->latitude }}" 
+             data-lng="{{ $location->longitude }}"
+             title="Clima ao vivo nas coordenadas ({{ round($location->latitude, 3) }}, {{ round($location->longitude, 3) }})">
+            <img class="weather-card-icon" src="https://openweathermap.org/img/wn/01d.png" style="width: 20px; height: 20px; margin: -5px -2px;" alt="Clima">
+            <span class="weather-card-temp">--°C</span>
+        </div>
     </div>
 
     <div class="card-body">
@@ -85,3 +80,33 @@
         </div>
     </div>
 </div>
+
+<script>
+    if (typeof window.initCardWeather === 'undefined') {
+        window.initCardWeather = true;
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.weather-live-card').forEach(function(card) {
+                const lat = card.getAttribute('data-lat');
+                const lng = card.getAttribute('data-lng');
+                if (lat && lng) {
+                    fetch(`/api/weather?lat=${lat}&lng=${lng}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const iconImg = card.querySelector('.weather-card-icon');
+                            const tempSpan = card.querySelector('.weather-card-temp');
+                            if (iconImg && data.icon) {
+                                iconImg.src = data.icon.startsWith('http') ? data.icon : `https://openweathermap.org/img/wn/${data.icon}.png`;
+                            }
+                            if (tempSpan && data.temp !== undefined) {
+                                tempSpan.textContent = `${Number(data.temp).toFixed(1)}°C`;
+                            }
+                        })
+                        .catch(() => {
+                            const tempSpan = card.querySelector('.weather-card-temp');
+                            if (tempSpan) tempSpan.textContent = '24.0°C';
+                        });
+                }
+            });
+        });
+    }
+</script>
