@@ -27,6 +27,7 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'flowName' => 'GeneralOAuthFlow',
         'redirect' => env('GOOGLE_REDIRECT_URI', rtrim(env('APP_URL', 'https://remoteworkplace.freepage.cc'), '/') . '/auth/google/callback'),
         'maps_api_key' => env('GOOGLE_MAPS_API_KEY'),
     ],
