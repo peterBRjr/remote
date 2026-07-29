@@ -38,7 +38,7 @@ class AuthController extends Controller
             if (!empty($supabaseUsers)) {
                 $sUser = $supabaseUsers[0];
                 $user = User::create([
-                    'name' => $sUser['name'] ?? 'Desenvolvedor RemoteSpot',
+                    'name' => $sUser['name'] ?? 'Desenvolvedor RemoteWorkplace',
                     'email' => $sUser['email'],
                     'password' => $sUser['password'] ?? Crypt::encryptString($plainPassword),
                     'avatar' => $sUser['avatar'] ?? null,

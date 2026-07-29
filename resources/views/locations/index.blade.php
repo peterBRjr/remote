@@ -1,4 +1,4 @@
-    <x-layout title="RemoteSpot — Descubra os Melhores Cafés e Coworkings">
+    <x-layout title="RemoteWorkplace — Descubra os Melhores Cafés e Coworkings">
         <!-- Hero Banner Compact & Dynamic -->
         <section class="hero">
             <div class="spots-counter-badge">

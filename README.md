@@ -6,10 +6,10 @@
   <img src="https://img.shields.io/badge/License-MIT-green.style=for-the-badge" alt="License">
 </p>
 
-<h1 align="center">📍 RemoteSpot — Descubra Espaços Perfeitos para Trabalho Remoto</h1>
+<h1 align="center">📍 RemoteWorkplace — Descubra Espaços Perfeitos para Trabalho Remoto</h1>
 
 <p align="center">
-  <b>RemoteSpot</b> é uma plataforma moderna e intuitiva projetada para nômades digitais, freelancers e profissionais remotos encontrarem e avaliarem os melhores cafés, coworkings, bibliotecas e lobbies de hotéis para trabalhar com alta produtividade.
+  <b>RemoteWorkplace</b> é uma plataforma moderna e intuitiva projetada para nômades digitais, freelancers e profissionais remotos encontrarem e avaliarem os melhores cafés, coworkings, bibliotecas e lobbies de hotéis para trabalhar com alta produtividade.
 </p>
 
 ---

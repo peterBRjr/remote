@@ -7,7 +7,7 @@
                     <circle cx="12" cy="10" r="3"/>
                 </svg>
             </div>
-            <span>Remote<span style="color: var(--accent-teal)">Spot</span></span>
+            <span>Remote<span style="color: var(--accent-teal)">Workplace</span></span>
         </a>
 
         <nav class="nav-links">

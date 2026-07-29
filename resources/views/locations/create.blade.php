@@ -1,4 +1,4 @@
-<x-layout title="Cadastrar Novo Spot — RemoteSpot">
+<x-layout title="Cadastrar Novo Spot — RemoteWorkplace">
     <div style="max-width: 760px; margin: 2rem auto;">
         <div class="glass-card" style="padding: 2.5rem;">
             <h1 style="font-family: var(--font-heading); font-size: 2rem; color: #fff; margin-bottom: 0.5rem;">

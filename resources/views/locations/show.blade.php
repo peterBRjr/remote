@@ -1,4 +1,4 @@
-<x-layout title="{{ $location->name }} — RemoteSpot">
+<x-layout title="{{ $location->name }} — RemoteWorkplace">
     <div style="margin-top: 1rem; margin-bottom: 2rem;">
         <a href="{{ route('locations.index') }}" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
             ← Voltar para a lista

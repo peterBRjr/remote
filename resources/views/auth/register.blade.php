@@ -4,7 +4,7 @@
             <!-- Header do Card -->
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div class="logo-icon" style="margin: 0 auto 1rem; width: 48px; height: 48px; font-size: 1.5rem;">🚀</div>
-                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #fff;">Criar Conta no RemoteSpot</h2>
+                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #fff;">Criar Conta no RemoteWorkplace</h2>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">
                     Junte-se a milhares de desenvolvedores e trabalhe dos melhores coworkings e cafés.
                 </p>

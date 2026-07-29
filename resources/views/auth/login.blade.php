@@ -4,7 +4,7 @@
             <!-- Header do Card -->
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div class="logo-icon" style="margin: 0 auto 1rem; width: 48px; height: 48px; font-size: 1.5rem;">⚡</div>
-                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #fff;">Acessar o RemoteSpot</h2>
+                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #fff;">Acessar o RemoteWorkplace</h2>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">
                     Conecte-se para descobrir, avaliar e favoritar os melhores locais de trabalho remoto.
                 </p>

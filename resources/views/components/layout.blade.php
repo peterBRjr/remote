@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>{{ $title ?? 'RemoteSpot - Os Melhores Cafés e Coworkings para Trabalhar' }}</title>
+    <title>{{ $title ?? 'RemoteWorkplace - Os Melhores Cafés e Coworkings para Trabalhar' }}</title>
     <meta name="description" content="Descubra, avalie e meça a qualidade dos melhores lugares para trabalhar remotamente com wi-fi rápido, tomadas abundantes e ambiente adequado.">
     
     <!-- CSS Nativo Personalizado (Com Cache Busting v1.3) -->
