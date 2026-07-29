@@ -52,8 +52,9 @@ class LocationController extends Controller
         }
 
         $locations = $query->latest()->paginate(9)->withQueryString();
+        $totalSpots = Location::count();
 
-        return view('locations.index', compact('locations'));
+        return view('locations.index', compact('locations', 'totalSpots'));
     }
 
     public function show(Location $location): View

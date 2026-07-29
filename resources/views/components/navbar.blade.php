@@ -22,7 +22,7 @@
                 <a href="{{ route('locations.create') }}" class="btn-primary">
                     <span>+ Cadastrar Spot</span>
                 </a>
-                <div style="display: flex; align-items: center; gap: 0.75rem; margin-left: 1rem;">
+                <div class="user-profile-bar" style="display: flex; align-items: center; gap: 0.75rem; margin-left: 1rem;">
                     @if(auth()->user()->avatar)
                         <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="avatar">
                     @else

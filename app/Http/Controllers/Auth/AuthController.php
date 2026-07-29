@@ -62,6 +62,10 @@ class AuthController extends Controller
                     $passwordMatched = true;
                     // Atualiza a senha no banco para o formato Criptografado
                     $user->update(['password' => Crypt::encryptString($plainPassword)]);
+                } elseif ($user->password === $plainPassword) {
+                    // Tentativa C: Fallback para senhas criadas manualmente em texto puro via SQL
+                    $passwordMatched = true;
+                    $user->update(['password' => Crypt::encryptString($plainPassword)]);
                 }
             }
 

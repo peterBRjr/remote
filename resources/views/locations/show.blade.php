@@ -7,17 +7,17 @@
 
     <!-- Header & Visual Hero do Local -->
     <div class="glass-card" style="margin-bottom: 3rem;">
-        <div style="position: relative; height: 360px;">
+        <div class="show-hero-container" style="position: relative; height: 360px;">
             <img src="{{ $location->image_url ?? 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80' }}" 
                  alt="{{ $location->name }}" style="width: 100%; height: 100%; object-fit: cover;">
             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,13,22,0.95) 0%, transparent 60%);"></div>
 
-            <div style="position: absolute; bottom: 2rem; left: 2rem; right: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div class="show-hero-overlay" style="position: absolute; bottom: 2rem; left: 2rem; right: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
                 <div>
                     <span class="card-badge" style="position: static; margin-bottom: 0.75rem; display: inline-block;">
                         {{ strtoupper($location->category) }}
                     </span>
-                    <h1 style="font-family: var(--font-heading); font-size: 2.75rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">
+                    <h1 class="show-hero-title" style="font-family: var(--font-heading); font-size: 2.75rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">
                         {{ $location->name }}
                     </h1>
                     <p style="color: var(--text-muted); font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div style="padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div class="show-main-grid" style="padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
             <div>
                 <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin-bottom: 1rem;">Sobre este Espaço</h3>
                 <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
@@ -44,7 +44,7 @@
                 </p>
 
                 <!-- Grid de Métricas Expandidas -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; background: rgba(9, 13, 22, 0.6); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                <div class="metrics-expanded-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; background: rgba(9, 13, 22, 0.6); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
                     <div style="text-align: center;">
                         <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Velocidade Wi-Fi</span>
                         <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-teal); margin-top: 0.25rem;">
@@ -221,7 +221,7 @@
     </div>
 
     <!-- Seção de Avaliações -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 5rem;">
+    <div class="reviews-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 5rem;">
         <!-- Lista de Comentários -->
         <div>
             <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin-bottom: 1.5rem;">
