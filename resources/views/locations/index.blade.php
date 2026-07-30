@@ -1,8 +1,9 @@
-    <x-layout title="RemoteWorkplace — Descubra os Melhores Cafés e Coworkings">
-        <!-- Hero Banner Compact & Dynamic -->
-        <section class="hero">
-            <div class="spots-counter-badge">
-                <span class="live-dot"></span>
+<x-layout title="RemoteWorkplace — Descubra os Melhores Cafés e Coworkings">
+
+    <!-- Hero Banner Compact & Dynamic -->
+    <section class="hero">
+        <div class="spots-counter-badge">
+            <span class="live-dot"></span>
                 <span><strong class="counter-number">{{ $totalSpots ?? 0 }}</strong> Spots Verificados</span>
             </div>
             <h1 class="hero-title">

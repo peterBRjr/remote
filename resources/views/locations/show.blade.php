@@ -55,14 +55,14 @@
                     <div style="text-align: center;">
                         <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Ruído Ambiente</span>
                         <div style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-top: 0.25rem;">
-                            {{ ucfirst($location->noise_level) }}
+                            @if($location->noise_level === 'quiet')🤫 Silencioso @elseif($location->noise_level === 'moderate')🎧 Moderado @else🗣️ Animado @endif
                         </div>
                     </div>
 
                     <div style="text-align: center;">
                         <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Tomadas Elétricas</span>
                         <div style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-top: 0.25rem;">
-                            {{ ucfirst($location->outlet_density) }}
+                            @if($location->outlet_density === 'abundant')🔌 Abundante @elseif($location->outlet_density === 'moderate')🔌 Média @else⚠️ Escassa @endif
                         </div>
                     </div>
 

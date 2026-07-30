@@ -8,8 +8,8 @@
     <title>{{ $title ?? 'RemoteWorkplace - Os Melhores Cafés e Coworkings para Trabalhar' }}</title>
     <meta name="description" content="Descubra, avalie e meça a qualidade dos melhores lugares para trabalhar remotamente com wi-fi rápido, tomadas abundantes e ambiente adequado.">
     
-    <!-- CSS Nativo Personalizado (Com Cache Busting v1.3) -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.3">
+    <!-- CSS Nativo Personalizado (Com Cache Busting v1.5) -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1.5">
 
     @stack('styles')
 </head>

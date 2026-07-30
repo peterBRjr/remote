@@ -1,4 +1,4 @@
-<x-layout title="Meus Favoritos — RemoteWorkplace">
+<x-layout title="Meus Favoritos — Remote Workplace">
     <div style="margin-bottom: 3rem;">
         <h1 style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">
             Meus Spots <span style="color: var(--accent-rose)">Favoritos</span> ❤️
